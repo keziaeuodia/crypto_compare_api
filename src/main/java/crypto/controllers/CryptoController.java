@@ -20,17 +20,42 @@ public class CryptoController {
 //        return cryptoService.search(fsym, tsym);
 //    }
 
+
     @RequestMapping("/histominute")
     public CryptoRoot search (@RequestParam(value = "fsym", required = true) String fsym,
                               @RequestParam(value = "tsym", required = true) String tsym,
                               @RequestParam(value = "persist", defaultValue = "false") boolean persist){
         return cryptoService.search(fsym, tsym, persist);
     }
+
     //get crypto data by "from" currency
-    @RequestMapping(method = RequestMethod.GET, value = "/{fsym}")
-    public HistoCrypto find(@PathVariable(value = "fsym") String fsym){
+    @GetMapping("/{fsym}")
+    public HistoCrypto findByFsym(@PathVariable(value = "fsym") String fsym){
         return cryptoService.getDataByFsym(fsym);
     }
+
+    //get crypto data by "to" currency
+    @GetMapping("/{tsym}")
+    public HistoCrypto findByTsym(@PathVariable(value = "tsym") String tsym){
+        return cryptoService.getDataByTsym(tsym);
+    }
+
+    //get all crypto data from the database
+    @GetMapping("/")
+    public HistoCrypto[] findAll(){
+        return cryptoService.getAllData();
+    }
+
+    @PostMapping("/")
+    public String add(@RequestBody HistoCrypto data){
+        return cryptoService.addData(data);
+    }
+
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable(value = "id") int id){
+        return cryptoService.deleteData(id);
+    }
+
 
 
 

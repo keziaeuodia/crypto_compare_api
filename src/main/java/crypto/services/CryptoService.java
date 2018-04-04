@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.xml.bind.DatatypeConverter;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+
 @Service
 public class CryptoService {
 
@@ -41,6 +45,24 @@ public class CryptoService {
         obj.setClose(data.getData()[0].getClose());
 
         cryptoMapper.saveCryptoData(obj);
+
+    }
+
+    private void saveAllDataPerMinute(CryptoRoot data, String fsym, String tsym){
+
+        HistoCrypto obj = new HistoCrypto();
+
+        for(int i = 0; i < data.getData().length; i++) {
+            obj.setFromCurrency(fsym);
+            obj.setToCurrency(tsym);
+            obj.setTime(data.getData()[i].getTime());
+            obj.setOpen(data.getData()[i].getOpen());
+            obj.setHigh(data.getData()[i].getHigh());
+            obj.setLow(data.getData()[i].getLow());
+            obj.setClose(data.getData()[i].getClose());
+
+            cryptoMapper.saveCryptoData(obj);
+        }
     }
 
     public HistoCrypto[] getAllData(){
@@ -51,5 +73,25 @@ public class CryptoService {
         return cryptoMapper.getDataByFsym(fsym);
     }
 
+    public HistoCrypto getDataByTsym(String tsym) {
+        return cryptoMapper.getDataByTsym(tsym);
+    }
 
+    public String addData(HistoCrypto data) {
+        cryptoMapper.addData(data);
+        return "Data inserted";
+    }
+
+    public String deleteData(int id) {
+        cryptoMapper.deleteData(id);
+        return "Data id: " + id + " deleted.";
+    }
+
+    public static String generate2(int length) throws NoSuchAlgorithmException {
+
+        SecureRandom random = new SecureRandom();
+        byte [] bytes = new byte[length/8];
+        random.nextBytes(bytes);
+        return DatatypeConverter.printHexBinary(bytes).toLowerCase();
+    }
 }
