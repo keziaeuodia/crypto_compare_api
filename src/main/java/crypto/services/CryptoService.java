@@ -83,20 +83,14 @@ public class CryptoService {
         return "Data id: " + id + " deleted.";
     }
 
-//    public static String generate2(int length) throws NoSuchAlgorithmException {
-//
-//        SecureRandom random = new SecureRandom();
-//        byte [] bytes = new byte[length/8];
-//        random.nextBytes(bytes);
-//        return DatatypeConverter.printHexBinary(bytes).toLowerCase();
-//    }
-
-    public HistoCrypto updateById(HistoCrypto histoCrypto) {
-        cryptoMapper.updateById(histoCrypto);
-        return cryptoMapper.getDataById(histoCrypto.getId());
+    public HistoCrypto update(HistoCrypto data) {
+        cryptoMapper.update(data);
+        return cryptoMapper.getDataById(data.getId());
     }
 
     public HistoCrypto getDataById(int id) {
         return cryptoMapper.getDataById(id);
     }
+
+
 }

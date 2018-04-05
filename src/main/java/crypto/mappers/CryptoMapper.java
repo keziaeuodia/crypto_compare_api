@@ -36,7 +36,7 @@ public interface CryptoMapper {
     public void deleteDataById(int id);
 
     @Update(UPDATE_DATA_BY_ID)
-    public int updateById(HistoCrypto histoCrypto);
+    public int update(HistoCrypto histoCrypto);
 
 
 }

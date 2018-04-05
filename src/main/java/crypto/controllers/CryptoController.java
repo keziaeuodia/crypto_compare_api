@@ -2,9 +2,9 @@ package crypto.controllers;
 
 import crypto.models.CryptoRoot;
 import crypto.models.HistoCrypto;
+import crypto.services.CryptoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import crypto.services.CryptoService;
 
 @RestController
 @RequestMapping("/data")
@@ -14,6 +14,7 @@ public class CryptoController {
     @Autowired
     CryptoService cryptoService;
 
+    //making 3rd party API call from CryptoCompare
     @RequestMapping("/histominute")
     public CryptoRoot search (@RequestParam(value = "fsym", required = true) String fsym,
                               @RequestParam(value = "tsym", required = true) String tsym,
@@ -45,16 +46,19 @@ public class CryptoController {
         return cryptoService.getAllData();
     }
 
+    //post new crypto data to DB
     @PostMapping("/")
     public String add(@RequestBody HistoCrypto data){
         return cryptoService.addData(data);
     }
 
+    //edit data in DB by ID
     @PatchMapping("/")
-    public HistoCrypto updateById(@RequestBody HistoCrypto histoCrypto) {
-        return cryptoService.updateById(histoCrypto);
+    public HistoCrypto update(@RequestBody HistoCrypto data) {
+        return cryptoService.update(data);
     }
 
+    //delete data in DB by ID
     @DeleteMapping("/{id}")
     public String deleteById(@PathVariable(value = "id") int id){
         return cryptoService.deleteDataById(id);
