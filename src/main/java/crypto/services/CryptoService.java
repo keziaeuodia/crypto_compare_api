@@ -7,10 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import javax.xml.bind.DatatypeConverter;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-
 @Service
 public class CryptoService {
 
@@ -69,29 +65,38 @@ public class CryptoService {
         return cryptoMapper.getAllData();
     }
 
-    public HistoCrypto getDataByFsym(String fsym){
+    public HistoCrypto[] getDataByFsym(String fsym){
         return cryptoMapper.getDataByFsym(fsym);
     }
 
-    public HistoCrypto getDataByTsym(String tsym) {
+    public HistoCrypto[] getDataByTsym(String tsym) {
         return cryptoMapper.getDataByTsym(tsym);
     }
 
     public String addData(HistoCrypto data) {
-        cryptoMapper.addData(data);
+        cryptoMapper.saveCryptoData(data);
         return "Data inserted";
     }
 
-    public String deleteData(int id) {
-        cryptoMapper.deleteData(id);
+    public String deleteDataById(int id) {
+        cryptoMapper.deleteDataById(id);
         return "Data id: " + id + " deleted.";
     }
 
-    public static String generate2(int length) throws NoSuchAlgorithmException {
+//    public static String generate2(int length) throws NoSuchAlgorithmException {
+//
+//        SecureRandom random = new SecureRandom();
+//        byte [] bytes = new byte[length/8];
+//        random.nextBytes(bytes);
+//        return DatatypeConverter.printHexBinary(bytes).toLowerCase();
+//    }
 
-        SecureRandom random = new SecureRandom();
-        byte [] bytes = new byte[length/8];
-        random.nextBytes(bytes);
-        return DatatypeConverter.printHexBinary(bytes).toLowerCase();
+    public HistoCrypto updateById(HistoCrypto histoCrypto) {
+        cryptoMapper.updateById(histoCrypto);
+        return cryptoMapper.getDataById(histoCrypto.getId());
+    }
+
+    public HistoCrypto getDataById(int id) {
+        return cryptoMapper.getDataById(id);
     }
 }

@@ -14,13 +14,6 @@ public class CryptoController {
     @Autowired
     CryptoService cryptoService;
 
-//    @RequestMapping("/histominute")
-//    public CryptoRoot search (@RequestParam(value = "fsym", required = true) String fsym,
-//                              @RequestParam(value = "tsym", required = true) String tsym){
-//        return cryptoService.search(fsym, tsym);
-//    }
-
-
     @RequestMapping("/histominute")
     public CryptoRoot search (@RequestParam(value = "fsym", required = true) String fsym,
                               @RequestParam(value = "tsym", required = true) String tsym,
@@ -29,15 +22,21 @@ public class CryptoController {
     }
 
     //get crypto data by "from" currency
-    @GetMapping("/{fsym}")
-    public HistoCrypto findByFsym(@PathVariable(value = "fsym") String fsym){
+    @RequestMapping(method= RequestMethod.GET, value = "/fsym")
+    public HistoCrypto[] findByFsym(@RequestParam(value = "fsym", required = true) String fsym){
         return cryptoService.getDataByFsym(fsym);
     }
 
     //get crypto data by "to" currency
-    @GetMapping("/{tsym}")
-    public HistoCrypto findByTsym(@PathVariable(value = "tsym") String tsym){
+    @RequestMapping(method= RequestMethod.GET, value = "/tsym")
+    public HistoCrypto[] findByTsym(@RequestParam(value = "tsym", required = true) String tsym){
         return cryptoService.getDataByTsym(tsym);
+    }
+
+    //get crypto data by "id"
+    @GetMapping("/{id}")
+    public HistoCrypto getDataById(@PathVariable(value = "id") int id){
+        return cryptoService.getDataById(id);
     }
 
     //get all crypto data from the database
@@ -51,12 +50,14 @@ public class CryptoController {
         return cryptoService.addData(data);
     }
 
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable(value = "id") int id){
-        return cryptoService.deleteData(id);
+    @PatchMapping("/")
+    public HistoCrypto updateById(@RequestBody HistoCrypto histoCrypto) {
+        return cryptoService.updateById(histoCrypto);
     }
 
-
-
+    @DeleteMapping("/{id}")
+    public String deleteById(@PathVariable(value = "id") int id){
+        return cryptoService.deleteDataById(id);
+    }
 
 }
