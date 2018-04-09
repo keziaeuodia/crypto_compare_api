@@ -14,7 +14,7 @@ public class CryptoController {
     @Autowired
     CryptoService cryptoService;
 
-    //making 3rd party API call from CryptoCompare
+    //making 3rd party API call from CryptoCompare, persist is optional
     @RequestMapping("/histominute")
     public CryptoRoot search (@RequestParam(value = "fsym", required = true) String fsym,
                               @RequestParam(value = "tsym", required = true) String tsym,
